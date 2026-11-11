@@ -1,0 +1,88 @@
+---
+# ConfigMap for non-sensitive env vars
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+  namespace: jira-sru
+data:
+  PORT: "5000"
+  MONGO_URI: "mongodb://mongodb:27017/jira_sru"
+  JWT_EXPIRE: "7d"
+  NODE_ENV: "production"
+
+---
+# Secret for sensitive env vars
+apiVersion: v1
+kind: Secret
+metadata:
+  name: backend-secret
+  namespace: jira-sru
+type: Opaque
+stringData:
+  JWT_SECRET: "super_secret_jwt_key_change_in_production_please"
+
+---
+# Backend Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: jira-sru
+  labels:
+    app: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: jira-sru-backend:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5000
+          envFrom:
+            - configMapRef:
+                name: backend-config
+            - secretRef:
+                name: backend-secret
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "300m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 20
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+
+---
+# Backend Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  namespace: jira-sru
+spec:
+  selector:
+    app: backend
+  ports:
+    - port: 5000
+      targetPort: 5000
+  type: ClusterIP

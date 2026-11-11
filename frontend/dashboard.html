@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="JiraSRU Dashboard — Your work, your projects, all in one place." />
+  <title>JiraSRU — Dashboard</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ===== LEFT SIDEBAR ===== -->
+  <aside class="sidebar" id="sidebar">
+    <a class="sidebar-logo" href="/dashboard.html">
+      <svg width="28" height="28" viewBox="0 0 36 36" fill="none">
+        <rect width="36" height="36" rx="8" fill="url(#sg1)"/>
+        <path d="M10 18L18 10L26 18L18 26L10 18Z" fill="white" opacity="0.9"/>
+        <path d="M14 18L18 14L22 18L18 22L14 18Z" fill="rgba(0,0,0,0.25)"/>
+        <defs><linearGradient id="sg1" x1="0" y1="0" x2="36" y2="36">
+          <stop offset="0%" stop-color="#4c9aff"/><stop offset="100%" stop-color="#0052cc"/>
+        </linearGradient></defs>
+      </svg>
+      <span class="sidebar-logo-text">JiraSRU</span>
+    </a>
+
+    <span class="sidebar-section-label">Main</span>
+    <ul class="sidebar-nav">
+      <li><a href="/dashboard.html" class="active"><span class="sidebar-nav-icon">🏠</span> Home</a></li>
+      <li><a href="/dashboard.html" id="my-work-link"><span class="sidebar-nav-icon">📋</span> My Work <span class="sidebar-badge" id="my-work-count">0</span></a></li>
+    </ul>
+
+    <div class="sidebar-divider"></div>
+    <span class="sidebar-section-label">Projects</span>
+    <ul class="sidebar-nav" id="sidebar-projects">
+      <li><a href="#" style="opacity:0.5"><span class="sidebar-nav-icon">⏳</span> Loading...</a></li>
+    </ul>
+
+    <div class="sidebar-user" id="sidebar-user">
+      <div class="assignee-avatar assignee-avatar-lg" id="sidebar-avatar">?</div>
+      <div>
+        <div class="sidebar-user-name" id="sidebar-name">User</div>
+        <div class="sidebar-user-email" id="sidebar-email"></div>
+      </div>
+      <button class="sidebar-logout" id="logout-btn" title="Sign out">⎋</button>
+    </div>
+  </aside>
+
+  <!-- ===== MAIN AREA ===== -->
+  <div class="main-area">
+
+    <!-- Top bar -->
+    <div class="topbar">
+      <div class="topbar-breadcrumb">
+        <span>🏠</span>
+        <span class="topbar-breadcrumb-sep">›</span>
+        <span>Dashboard</span>
+      </div>
+      <div class="topbar-actions">
+        <button class="topbar-btn topbar-btn-primary" id="open-create-modal">+ New Project</button>
+      </div>
+    </div>
+
+    <!-- Page Content -->
+    <div class="page-content">
+
+      <!-- Stats Row -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-card-icon">📁</div>
+          <div class="stat-card-number" id="stat-projects">—</div>
+          <div class="stat-card-label">Projects</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon">🎯</div>
+          <div class="stat-card-number" id="stat-assigned">—</div>
+          <div class="stat-card-label">Assigned to Me</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon">✅</div>
+          <div class="stat-card-number" id="stat-done">—</div>
+          <div class="stat-card-label">Completed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon">🔥</div>
+          <div class="stat-card-number" id="stat-inprogress">—</div>
+          <div class="stat-card-label">In Progress</div>
+        </div>
+      </div>
+
+      <!-- Main Dashboard Layout -->
+      <div class="dashboard-layout">
+
+        <!-- Left: My Work + Projects -->
+        <div>
+
+          <!-- My Work Panel -->
+          <div class="my-work-panel" style="margin-bottom:24px;">
+            <div class="projects-panel-header">
+              <span class="section-title" style="margin:0;">
+                My Work
+                <span class="count-chip" id="my-issues-count">0</span>
+              </span>
+            </div>
+            <div class="my-work-tabs">
+              <button class="my-work-tab active" data-tab="assigned">Assigned to Me</button>
+              <button class="my-work-tab" data-tab="reported">Reported by Me</button>
+            </div>
+            <div class="my-work-body" id="my-work-body">
+              <div class="loading-state">
+                <div class="spinner spinner-dark"></div>
+                <span>Loading your issues...</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Projects Panel -->
+          <div class="projects-panel">
+            <div class="projects-panel-header">
+              <span class="section-title" style="margin:0;">
+                Projects
+                <span class="count-chip" id="projects-count">0</span>
+              </span>
+              <button class="btn btn-primary btn-sm" id="open-create-modal-2">+ New</button>
+            </div>
+            <div id="projects-list">
+              <div class="loading-state" style="padding:30px">
+                <div class="spinner spinner-dark"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right sidebar -->
+        <div class="dashboard-sidebar">
+          <div class="dashboard-sidebar-card">
+            <div class="dashboard-sidebar-card-title">Quick Stats</div>
+            <div style="display:flex;flex-direction:column;gap:10px;" id="quick-stats">
+              <div class="flex-center gap-8" style="justify-content:space-between;">
+                <span class="text-sm text-secondary">🔴 To Do</span>
+                <span class="fw-600" id="qs-todo">—</span>
+              </div>
+              <div class="flex-center gap-8" style="justify-content:space-between;">
+                <span class="text-sm text-secondary">🔵 In Progress</span>
+                <span class="fw-600" id="qs-progress">—</span>
+              </div>
+              <div class="flex-center gap-8" style="justify-content:space-between;">
+                <span class="text-sm text-secondary">🟣 In Review</span>
+                <span class="fw-600" id="qs-review">—</span>
+              </div>
+              <div class="flex-center gap-8" style="justify-content:space-between;">
+                <span class="text-sm text-secondary">🟢 Done</span>
+                <span class="fw-600" id="qs-done">—</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="dashboard-sidebar-card">
+            <div class="dashboard-sidebar-card-title">Priority Breakdown</div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <div class="flex-center gap-8" style="justify-content:space-between;">
+                <span class="text-sm text-secondary">🔴 Critical</span>
+                <span class="fw-600" id="pq-critical">—</span>
+              </div>
+              <div class="flex-center gap-8" style="justify-content:space-between;">
+                <span class="text-sm text-secondary">🟠 High</span>
+                <span class="fw-600" id="pq-high">—</span>
+              </div>
+              <div class="flex-center gap-8" style="justify-content:space-between;">
+                <span class="text-sm text-secondary">🟡 Medium</span>
+                <span class="fw-600" id="pq-medium">—</span>
+              </div>
+              <div class="flex-center gap-8" style="justify-content:space-between;">
+                <span class="text-sm text-secondary">🟢 Low</span>
+                <span class="fw-600" id="pq-low">—</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CREATE PROJECT MODAL ===== -->
+<div class="modal-overlay" id="create-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title">Create New Project</h2>
+      <button class="modal-close" id="close-create-modal">✕</button>
+    </div>
+    <form id="create-project-form">
+      <div class="modal-body">
+        <div class="alert alert-error" id="create-error"></div>
+        <div class="form-group">
+          <label class="form-label" for="project-name">Project Name *</label>
+          <input class="form-input" type="text" id="project-name" placeholder="e.g. Mobile App Redesign" required maxlength="100" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="project-key">Project Key *
+            <span class="text-muted text-xs"> (auto-generated, max 8 chars)</span>
+          </label>
+          <input class="form-input" type="text" id="project-key" placeholder="e.g. MAR" required maxlength="8" style="text-transform:uppercase;font-family:monospace;" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="project-description">Description</label>
+          <textarea class="form-textarea" id="project-description" placeholder="What is this project about?" maxlength="500"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="cancel-create">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="create-project-btn">Create Project</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+
+<script src="/js/api.js"></script>
+<script src="/js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+---
+# Ingress for HTTP routing (requires ingress-nginx controller)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jira-sru-ingress
+  namespace: jira-sru
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: jira-sru.local
+      http:
+        paths:
+          # Route API requests to backend
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: backend
+                port:
+                  number: 5000
+          # Route health check to backend
+          - path: /health
+            pathType: Prefix
+            backend:
+              service:
+                name: backend
+                port:
+                  number: 5000
+          # Route everything else to frontend
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 80
