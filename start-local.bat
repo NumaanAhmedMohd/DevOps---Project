@@ -30,7 +30,7 @@ if %errorlevel% neq 0 (
   echo.
   echo  If you have Docker Desktop installed, close this and run:
   echo      docker-compose up --build
-  echo  from the Jira_SRU folder instead.
+  echo  from the jirahub folder instead.
   echo.
   pause
   exit /b 1

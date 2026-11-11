@@ -1,5 +1,5 @@
 {
-  "name": "jira-sru-backend",
+  "name": "jirahub-backend",
   "version": "1.0.0",
   "description": "Jira-type project management API",
   "main": "src/app.js",

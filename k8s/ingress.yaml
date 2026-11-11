@@ -3,15 +3,15 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: jira-sru-ingress
-  namespace: jira-sru
+  name: jirahub-ingress
+  namespace: jirahub
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/proxy-body-size: "10m"
 spec:
   ingressClassName: nginx
   rules:
-    - host: jira-sru.local
+    - host: jirahub.local
       http:
         paths:
           # Route API requests to backend

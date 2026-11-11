@@ -1,9 +1,9 @@
 @echo off
-title Jira SRU Launcher
+title JiraHub Launcher
 color 0A
 echo.
 echo  ============================================
-echo    Jira SRU - Starting Application
+echo    JiraHub - Starting Application
 echo  ============================================
 echo.
 
@@ -17,7 +17,7 @@ echo.
 
 :: Start Backend
 echo [2/3] Starting Backend (port 5000)...
-start "Jira SRU Backend" cmd /k "cd /d %~dp0backend && npm run dev"
+start "JiraHub Backend" cmd /k "cd /d %~dp0backend && npm run dev"
 timeout /t 4 /nobreak >nul
 echo       Backend running on http://localhost:5000
 echo.
@@ -38,6 +38,6 @@ pause >nul
 
 :: Cleanup
 echo Stopping services...
-taskkill /f /fi "WINDOWTITLE eq Jira SRU Backend" >nul 2>&1
+taskkill /f /fi "WINDOWTITLE eq JiraHub Backend" >nul 2>&1
 taskkill /f /im mongod.exe >nul 2>&1
 echo Done. Goodbye!

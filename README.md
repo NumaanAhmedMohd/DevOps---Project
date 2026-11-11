@@ -1,4 +1,4 @@
-# 🗂 JiraSRU — Project Management App
+# 🗂 JiraHub — Project Management App
 
 A **Jira-inspired** project management application built with **Node.js**, **Express.js**, **MongoDB**, **Docker**, and **Kubernetes**.
 
@@ -34,7 +34,7 @@ A **Jira-inspired** project management application built with **Node.js**, **Exp
 ## 📁 Project Structure
 
 ```
-Jira_SRU/
+jirahub/
 ├── backend/
 │   ├── src/
 │   │   ├── config/db.js          # MongoDB connection
@@ -71,7 +71,7 @@ Jira_SRU/
 
 ```bash
 # Clone or navigate to the project
-cd Jira_SRU
+cd jirahub
 
 # Copy env example (optional, compose has defaults)
 cp backend/.env.example backend/.env
@@ -96,7 +96,7 @@ npm install
 
 # Create .env file
 cp .env.example .env
-# Edit .env: set MONGO_URI=mongodb://localhost:27017/jira_sru
+# Edit .env: set MONGO_URI=mongodb://localhost:27017/jirahub
 
 # Start backend
 npm run dev
@@ -119,14 +119,14 @@ npm run dev
 
 ```bash
 # Build backend image
-docker build -t jira-sru-backend:latest ./backend
+docker build -t jirahub-backend:latest ./backend
 
 # Build frontend image
-docker build -t jira-sru-frontend:latest ./frontend
+docker build -t jirahub-frontend:latest ./frontend
 
 # For Minikube: load images into cluster
-minikube image load jira-sru-backend:latest
-minikube image load jira-sru-frontend:latest
+minikube image load jirahub-backend:latest
+minikube image load jirahub-frontend:latest
 ```
 
 ### Step 2: Apply K8s Manifests
@@ -152,17 +152,17 @@ kubectl apply -f k8s/ingress.yaml
 
 ```bash
 # Check all pods are running
-kubectl get pods -n jira-sru
+kubectl get pods -n jirahub
 
 # Check services
-kubectl get services -n jira-sru
+kubectl get services -n jirahub
 
 # Access via NodePort (Minikube)
-minikube service frontend -n jira-sru
+minikube service frontend -n jirahub
 
 # Or port-forward
-kubectl port-forward svc/frontend 3000:80 -n jira-sru
-kubectl port-forward svc/backend 5000:5000 -n jira-sru
+kubectl port-forward svc/frontend 3000:80 -n jirahub
+kubectl port-forward svc/backend 5000:5000 -n jirahub
 ```
 
 ### Step 4: Ingress Setup (Optional)
@@ -172,12 +172,12 @@ kubectl port-forward svc/backend 5000:5000 -n jira-sru
 minikube addons enable ingress
 
 # Add to /etc/hosts (or C:\Windows\System32\drivers\etc\hosts on Windows)
-# <minikube-ip>  jira-sru.local
+# <minikube-ip>  jirahub.local
 
 # Get minikube IP
 minikube ip
 
-# Then access: http://jira-sru.local
+# Then access: http://jirahub.local
 ```
 
 ---
@@ -233,7 +233,7 @@ minikube ip
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `PORT` | `5000` | Backend server port |
-| `MONGO_URI` | `mongodb://localhost:27017/jira_sru` | MongoDB connection string |
+| `MONGO_URI` | `mongodb://localhost:27017/jirahub` | MongoDB connection string |
 | `JWT_SECRET` | *(required)* | Secret key for JWT signing |
 | `JWT_EXPIRE` | `7d` | JWT expiry duration |
 | `NODE_ENV` | `development` | Environment mode |
@@ -247,5 +247,5 @@ minikube ip
 docker-compose down -v  # -v removes volumes (data)
 
 # Kubernetes
-kubectl delete namespace jira-sru
+kubectl delete namespace jirahub
 ```
